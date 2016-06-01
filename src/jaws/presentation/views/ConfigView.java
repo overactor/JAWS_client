@@ -3,6 +3,8 @@ package jaws.presentation.views;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -13,14 +15,16 @@ import javax.swing.JTextField;
 public class ConfigView extends JFrame {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -9041765805686943532L;
-	
+
 	JList<String> logList;
-	
+
 	JTextField logPathField;
-	
+
+	JButton applyButton, resetButton, onOffButton;
+
 	public static void main(String[] args) {
 		new ConfigView();
 	}
@@ -28,7 +32,7 @@ public class ConfigView extends JFrame {
 	public ConfigView() {
 
 		super("JAWS config client");
-		
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		setLayout(new BorderLayout());
@@ -54,7 +58,18 @@ public class ConfigView extends JFrame {
 		// bottom panel
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 		add(bottomPanel, BorderLayout.SOUTH);
-		
+
+		JPanel bottomButtonsPanel = new JPanel();
+		bottomPanel.add(bottomButtonsPanel, BorderLayout.WEST);
+		bottomButtonsPanel.setLayout(new BoxLayout(bottomButtonsPanel, BoxLayout.X_AXIS));
+		applyButton = new JButton("apply");
+		bottomButtonsPanel.add(applyButton);
+		resetButton = new JButton("reset");
+		bottomButtonsPanel.add(resetButton);
+
+		onOffButton = new JButton("on/off");
+		bottomPanel.add(onOffButton, BorderLayout.EAST);
+
 		setBounds(200, 200, 400, 600);
 		setVisible(true);
 	}

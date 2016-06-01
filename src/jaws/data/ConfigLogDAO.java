@@ -3,6 +3,7 @@ package jaws.data;
 import java.net.Socket;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.json.JSONObject;
@@ -14,8 +15,11 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 	private final int interval;
 	private final Consumer<List<JSONObject>> logCallback;
 	private final Consumer<Map<String, JSONObject>> configCallback;
-
+	
+	private final Object updateConfigsLock = new Object();
 	private boolean updateConfigs;
+	
+	Map<String, JSONObject> configs = new ConcurrentHashMap<>();
 
 	public ConfigLogDAO(Socket server, int interval, Consumer<List<JSONObject>> logCallback, Consumer<Map<String, JSONObject>> configCallback) {
 		this.server = server;
@@ -26,19 +30,29 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 
 	@Override
 	public void updateConfigs() {
-		// TODO Auto-generated method stub
-
+		synchronized (updateConfigsLock) {
+			updateConfigs = true;
+		}
 	}
 
 	@Override
 	public void saveConfigs(Map<String, JSONObject> configs) {
-		// TODO Auto-generated method stub
-
+		synchronized (this.configs) {
+			this.configs.putAll(configs);
+		}
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		while(true) {
+			synchronized (updateConfigsLock) {
+				// TODO stuff with updateConfigsLock
+				this.updateConfigs = false;
+			}
+			synchronized (configs) {
+				// TODO Do stuff with configs
+			}
+			// TODO write to and read from socket
+		}
 	}
 }

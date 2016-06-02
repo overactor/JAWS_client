@@ -17,9 +17,9 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 	private final Consumer<Map<String, JSONObject>> configCallback;
 	
 	private final Object updateConfigsLock = new Object();
-	private boolean updateConfigs;
+	private volatile boolean updateConfigs;
 	
-	Map<String, JSONObject> configs = new ConcurrentHashMap<>();
+	private Map<String, JSONObject> configs = new ConcurrentHashMap<>();
 
 	public ConfigLogDAO(Socket server, int interval, Consumer<List<JSONObject>> logCallback, Consumer<Map<String, JSONObject>> configCallback) {
 		this.server = server;

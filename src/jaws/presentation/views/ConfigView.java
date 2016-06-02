@@ -20,14 +20,8 @@ public class ConfigView extends JFrame {
 	private static final long serialVersionUID = -9041765805686943532L;
 
 	JList<String> logList;
-
 	JTextField logPathField;
-
 	JButton applyButton, resetButton, onOffButton;
-
-	public static void main(String[] args) {
-		new ConfigView();
-	}
 
 	public ConfigView() {
 

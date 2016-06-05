@@ -4,7 +4,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
@@ -14,7 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 public class ConfigView extends JFrame {
 
@@ -27,6 +29,7 @@ public class ConfigView extends JFrame {
 	JButton loadPresetButton, savePresetButton, newPresetButton;
 	
 	JTextField webrootField;
+	JSpinner httpPortSpinner, threadSpinner;
 
 	JList<String> logList;
 	JTextField logPathField;
@@ -56,6 +59,16 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, new JLabel("Webroot"), 0, 1);
 		webrootField = new JTextField();
 		addWithConstraints(pane, webrootField, 1, 1, 5, 1);
+		
+		addWithConstraints(pane, new JLabel("Port HTTP"), 0, 2);
+		SpinnerModel model = new SpinnerNumberModel(80, 1, 9999, 1);     
+		httpPortSpinner = new JSpinner(model);
+		addWithConstraints(pane, httpPortSpinner, 1, 2, 2, 1);
+		
+		addWithConstraints(pane, new JLabel("Threads"), 3, 2);
+		model = new SpinnerNumberModel(10, 1, 9999, 1);     
+		threadSpinner = new JSpinner(model);
+		addWithConstraints(pane, threadSpinner, 4, 2, 2, 1, 0, 0);
 
 		// loglogPanel.add(logPathPanel, BorderLayout.NORTH);
 		

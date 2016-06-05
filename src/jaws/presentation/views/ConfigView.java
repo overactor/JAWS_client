@@ -1,19 +1,18 @@
 package jaws.presentation.views;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
@@ -38,57 +37,45 @@ public class ConfigView extends JFrame {
 		super("JAWS config client");
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		setLayout(new GridBagLayout());
+		Container pane = getContentPane();
 
-		setLayout(new BorderLayout());
-
-		// config panel
-		JPanel configPanel = new JPanel(new GridBagLayout());
-		add(configPanel, BorderLayout.NORTH);
-		addWithConstraints(configPanel, new JLabel("Preset"), 0, 0);
+		// config
+		addWithConstraints(pane, new JLabel("Preset"), 0, 0);
 		presetCombo = new JComboBox<>();
-		addWithConstraints(configPanel, presetCombo, 1, 0, 2, 1);
+		addWithConstraints(pane, presetCombo, 1, 0, 2, 1);
 		
 		loadPresetButton = new JButton("load");
 		savePresetButton = new JButton("save");
 		newPresetButton = new JButton("new");
-		addWithConstraints(configPanel, loadPresetButton, 3, 0);
-		addWithConstraints(configPanel, savePresetButton, 4, 0);
-		addWithConstraints(configPanel, newPresetButton, 5, 0);
+		addWithConstraints(pane, loadPresetButton, 3, 0);
+		addWithConstraints(pane, savePresetButton, 4, 0);
+		addWithConstraints(pane, newPresetButton, 5, 0);
 		
-		addWithConstraints(configPanel, new JLabel("Webroot"), 0, 1);
+		addWithConstraints(pane, new JLabel("Webroot"), 0, 1);
 		webrootField = new JTextField();
-		addWithConstraints(configPanel, webrootField, 1, 1, 5, 1);
+		addWithConstraints(pane, webrootField, 1, 1, 5, 1);
 
-		// log panel
-		JPanel logPanel = new JPanel(new BorderLayout());
-
-		JPanel logPathPanel = new JPanel(new BorderLayout());
-		logPanel.add(logPathPanel, BorderLayout.NORTH);
-		logPathPanel.add(new JLabel("Logs"), BorderLayout.WEST);
+		// loglogPanel.add(logPathPanel, BorderLayout.NORTH);
+		
+		addWithConstraints(pane, new JLabel("Logs"), 0, 3);
 		logPathField = new JTextField();
-		logPathPanel.add(logPathField, BorderLayout.CENTER);
+		addWithConstraints(pane, logPathField, 1, 3, 5, 1);
 
 		logList = new JList<String>();
-		logPanel.add(new JScrollPane(logList), BorderLayout.CENTER);
+		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 6, 1, 6, 6);
 
-		add(logPanel, BorderLayout.CENTER);
-
-		// bottom panel
-		JPanel bottomPanel = new JPanel(new BorderLayout());
-		add(bottomPanel, BorderLayout.SOUTH);
-
-		JPanel bottomButtonsPanel = new JPanel();
-		bottomPanel.add(bottomButtonsPanel, BorderLayout.WEST);
-		bottomButtonsPanel.setLayout(new BoxLayout(bottomButtonsPanel, BoxLayout.X_AXIS));
 		applyButton = new JButton("apply");
-		bottomButtonsPanel.add(applyButton);
+		addWithConstraints(pane, applyButton, 0, 5);
 		resetButton = new JButton("reset");
-		bottomButtonsPanel.add(resetButton);
+		addWithConstraints(pane, resetButton, 1, 5);
 
 		onOffButton = new JButton("on/off");
-		bottomPanel.add(onOffButton, BorderLayout.EAST);
+		addWithConstraints(pane, onOffButton, 5, 5);
 
-		setBounds(200, 200, 400, 600);
+		setBounds(200, 200, 500, 600);
+		setMinimumSize(new Dimension(450, 550));
 		setVisible(true);
 	}
 	
@@ -100,7 +87,7 @@ public class ConfigView extends JFrame {
 	private static void addWithConstraints(Container container, JComponent component,
 	                               int gridx, int gridy,
 	                               int gridWidth, int gridHeight) {
-		addWithConstraints(container, component, gridx, gridy, gridWidth, gridHeight, gridWidth, gridHeight);
+		addWithConstraints(container, component, gridx, gridy, gridWidth, gridHeight, gridWidth == 1 ? 0 : gridWidth, gridHeight == 1 ? 0 : gridHeight);
 	}
 		
 	private static void addWithConstraints(Container container, JComponent component,
@@ -109,7 +96,7 @@ public class ConfigView extends JFrame {
 	                               int weightx, int weighty) {
 		
 		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.fill = weighty > 0 ? GridBagConstraints.BOTH : GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(2, 5, 2, 5);
 		constraints.gridx = gridx;
 		constraints.gridy = gridy;

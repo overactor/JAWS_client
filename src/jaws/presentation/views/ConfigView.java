@@ -26,7 +26,6 @@ public class ConfigView extends JFrame {
 	private static final long serialVersionUID = -9041765805686943532L;
 	
 	JComboBox<String> presetCombo;
-	JButton loadPresetButton, savePresetButton, newPresetButton;
 	
 	JTextField webrootField;
 	JSpinner httpPortSpinner, threadSpinner;
@@ -35,7 +34,7 @@ public class ConfigView extends JFrame {
 	JTextField logPathField;
 	JButton applyButton, resetButton, onOffButton;
 
-	public ConfigView() {
+	public ConfigView(PresetDelegate presetDelegate) {
 
 		super("JAWS config client");
 
@@ -49,9 +48,12 @@ public class ConfigView extends JFrame {
 		presetCombo = new JComboBox<>();
 		addWithConstraints(pane, presetCombo, 1, 0, 2, 1);
 		
-		loadPresetButton = new JButton("load");
-		savePresetButton = new JButton("save");
-		newPresetButton = new JButton("new");
+		JButton loadPresetButton = new JButton("load");
+		loadPresetButton.addActionListener(ae -> presetDelegate.loadPresetClicked());
+		JButton savePresetButton = new JButton("save");
+		savePresetButton.addActionListener(ae -> presetDelegate.savePresetClicked());
+		JButton newPresetButton = new JButton("new");
+		newPresetButton.addActionListener(ae -> presetDelegate.newPresetClicked());
 		addWithConstraints(pane, loadPresetButton, 3, 0);
 		addWithConstraints(pane, savePresetButton, 4, 0);
 		addWithConstraints(pane, newPresetButton, 5, 0);

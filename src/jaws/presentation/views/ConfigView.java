@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
@@ -48,12 +49,27 @@ public class ConfigView extends JFrame {
 
 		setLayout(new GridBagLayout());
 		Container pane = getContentPane();
-		
-		JMenuBar mainMenu = new JMenuBar();
+
+		// main menu
 		JMenuItem connectItem = new JMenuItem("connect");
 		connectItem.addActionListener(ae -> menuDelegate.connectClicked());
 		JMenuItem importItem = new JMenuItem("import");
+		importItem.addActionListener(ae -> menuDelegate.importClicked());
 		JMenuItem exportItem = new JMenuItem("export");
+		exportItem.addActionListener(ae -> menuDelegate.exportClicked());
+
+		JMenu connectionMenu = new JMenu("connection");
+		connectionMenu.add(connectItem);
+
+		JMenu importExportMenu = new JMenu("import/export");
+		importExportMenu.add(importItem);
+		importExportMenu.add(exportItem);
+
+		JMenuBar mainMenu = new JMenuBar();
+		mainMenu.add(connectionMenu);
+		mainMenu.add(importExportMenu);
+
+		setJMenuBar(mainMenu);
 
 		// config
 		addWithConstraints(pane, new JLabel("Preset"), 0, 0);

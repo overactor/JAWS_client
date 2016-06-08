@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import jaws.business.ConfigDelegate;
 import jaws.business.PresetDelegate;
 
 public class ConfigView extends JFrame {
@@ -36,7 +37,7 @@ public class ConfigView extends JFrame {
 	JTextField logPathField;
 	JButton applyButton, resetButton, onOffButton;
 
-	public ConfigView(PresetDelegate presetDelegate) {
+	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate) {
 
 		super("JAWS config client");
 

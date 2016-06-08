@@ -24,9 +24,9 @@ public class ConfigView extends JFrame {
 	 *
 	 */
 	private static final long serialVersionUID = -9041765805686943532L;
-	
+
 	JComboBox<String> presetCombo;
-	
+
 	JTextField webrootField;
 	JSpinner httpPortSpinner, threadSpinner;
 
@@ -39,7 +39,7 @@ public class ConfigView extends JFrame {
 		super("JAWS config client");
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+
 		setLayout(new GridBagLayout());
 		Container pane = getContentPane();
 
@@ -47,7 +47,7 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, new JLabel("Preset"), 0, 0);
 		presetCombo = new JComboBox<>();
 		addWithConstraints(pane, presetCombo, 1, 0, 2, 1);
-		
+
 		JButton loadPresetButton = new JButton("load");
 		loadPresetButton.addActionListener(ae -> presetDelegate.loadPresetClicked());
 		JButton savePresetButton = new JButton("save");
@@ -57,23 +57,23 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, loadPresetButton, 3, 0);
 		addWithConstraints(pane, savePresetButton, 4, 0);
 		addWithConstraints(pane, newPresetButton, 5, 0);
-		
+
 		addWithConstraints(pane, new JLabel("Webroot"), 0, 1);
 		webrootField = new JTextField();
 		addWithConstraints(pane, webrootField, 1, 1, 5, 1);
-		
+
 		addWithConstraints(pane, new JLabel("Port HTTP"), 0, 2);
-		SpinnerModel model = new SpinnerNumberModel(80, 1, 9999, 1);     
+		SpinnerModel model = new SpinnerNumberModel(80, 1, 65536, 1);
 		httpPortSpinner = new JSpinner(model);
 		addWithConstraints(pane, httpPortSpinner, 1, 2, 2, 1);
-		
+
 		addWithConstraints(pane, new JLabel("Threads"), 3, 2);
-		model = new SpinnerNumberModel(10, 1, 9999, 1);     
+		model = new SpinnerNumberModel(10, 1, 9999, 1);
 		threadSpinner = new JSpinner(model);
 		addWithConstraints(pane, threadSpinner, 4, 2, 2, 1, 0, 0);
 
 		// loglogPanel.add(logPathPanel, BorderLayout.NORTH);
-		
+
 		addWithConstraints(pane, new JLabel("Logs"), 0, 3);
 		logPathField = new JTextField();
 		addWithConstraints(pane, logPathField, 1, 3, 5, 1);
@@ -93,23 +93,23 @@ public class ConfigView extends JFrame {
 		setMinimumSize(new Dimension(450, 550));
 		setVisible(true);
 	}
-	
+
 	private static void addWithConstraints(Container container, JComponent component,
 	                               int gridx, int gridy) {
 		addWithConstraints(container, component, gridx, gridy, 1, 1);
 	}
-	
+
 	private static void addWithConstraints(Container container, JComponent component,
 	                               int gridx, int gridy,
 	                               int gridWidth, int gridHeight) {
 		addWithConstraints(container, component, gridx, gridy, gridWidth, gridHeight, gridWidth == 1 ? 0 : gridWidth, gridHeight == 1 ? 0 : gridHeight);
 	}
-		
+
 	private static void addWithConstraints(Container container, JComponent component,
 	                               int gridx, int gridy,
 	                               int gridWidth, int gridHeight,
 	                               int weightx, int weighty) {
-		
+
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = weighty > 0 ? GridBagConstraints.BOTH : GridBagConstraints.HORIZONTAL;
 		constraints.insets = new Insets(2, 5, 2, 5);
@@ -119,7 +119,7 @@ public class ConfigView extends JFrame {
 		constraints.gridheight = gridHeight;
 		constraints.weightx = weightx;
 		constraints.weighty = weighty;
-		
+
 		container.add(component);
 		((GridBagLayout) container.getLayout()).setConstraints(component, constraints);
 	}

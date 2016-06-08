@@ -12,6 +12,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -19,6 +21,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
 import jaws.business.ConfigDelegate;
+import jaws.business.MenuDelegate;
 import jaws.business.PresetDelegate;
 
 public class ConfigView extends JFrame {
@@ -37,7 +40,7 @@ public class ConfigView extends JFrame {
 	JTextField logPathField;
 	JButton applyButton, resetButton, onOffButton;
 
-	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate) {
+	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate, MenuDelegate menuDelegate) {
 
 		super("JAWS config client");
 
@@ -45,6 +48,12 @@ public class ConfigView extends JFrame {
 
 		setLayout(new GridBagLayout());
 		Container pane = getContentPane();
+		
+		JMenuBar mainMenu = new JMenuBar();
+		JMenuItem connectItem = new JMenuItem("connect");
+		connectItem.addActionListener(ae -> menuDelegate.connectClicked());
+		JMenuItem importItem = new JMenuItem("import");
+		JMenuItem exportItem = new JMenuItem("export");
 
 		// config
 		addWithConstraints(pane, new JLabel("Preset"), 0, 0);

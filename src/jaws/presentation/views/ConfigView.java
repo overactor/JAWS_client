@@ -85,11 +85,14 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 6, 1, 6, 6);
 
 		applyButton = new JButton("apply");
+		applyButton.addActionListener(ae -> configDelegate.applyClicked());
 		addWithConstraints(pane, applyButton, 0, 5);
 		resetButton = new JButton("reset");
+		resetButton.addActionListener(ae -> configDelegate.resetClicked());
 		addWithConstraints(pane, resetButton, 1, 5);
 
 		onOffButton = new JButton("on/off");
+		onOffButton.addActionListener(ae -> configDelegate.onOffClicked());
 		addWithConstraints(pane, onOffButton, 5, 5);
 
 		setBounds(200, 200, 500, 600);

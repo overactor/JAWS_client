@@ -2,7 +2,7 @@ package jaws.business;
 
 public interface ConfigDelegate {
 
-	public void loadConfig();
-	public void saveConfig();
-	public void onOff();
+	public void resetClicked();
+	public void applyClicked();
+	public void onOffClicked();
 }

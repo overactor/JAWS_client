@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import jaws.business.PresetDelegate;
+
 public class ConfigView extends JFrame {
 
 	/**

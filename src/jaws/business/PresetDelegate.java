@@ -1,4 +1,4 @@
-package jaws.presentation.views;
+package jaws.business;
 
 public interface PresetDelegate {
 

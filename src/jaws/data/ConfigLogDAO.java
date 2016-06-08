@@ -18,7 +18,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 
 	private volatile Boolean updateConfigs;
 
-	private Map<String, JSONObject> configs = new ConcurrentHashMap<>();
+	private Map<String, JSONObject> configsToSave = new ConcurrentHashMap<>();
 
 	public ConfigLogDAO(Socket server, int interval, Consumer<List<JSONObject>> logCallback, Consumer<Map<String, JSONObject>> configCallback) {
 		this.server = server;
@@ -36,19 +36,37 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 
 	@Override
 	public void saveConfigs(Map<String, JSONObject> configs) {
-		synchronized (this.configs) {
-			this.configs.putAll(configs);
+		synchronized (this.configsToSave) {
+			this.configsToSave.putAll(configs);
 		}
 	}
 
 	@Override
 	public void run() {
+
+		long lastLogUpdate = -1;
+
 		while(true) {
+
+			JSONObject requestJson = new JSONObject();
+
+			JSONObject updateLogsJson = new JSONObject();
+			requestJson.put("updateLogs", updateLogsJson);
+
+			if(lastLogUpdate > 0) {
+				updateLogsJson.put("lastUpdate", lastLogUpdate);
+			}
+
 			synchronized (updateConfigs) {
 				// TODO stuff with updateConfigsLock
-				this.updateConfigs = false;
+				if(updateConfigs) {
+					JSONObject updateConfigsJson = new JSONObject();
+					requestJson.put("updateConfigs", updateConfigsJson);
+
+					updateConfigs = false;
+				}
 			}
-			synchronized (configs) {
+			synchronized (configsToSave) {
 				// TODO Do stuff with configs
 			}
 			// TODO write to and read from socket

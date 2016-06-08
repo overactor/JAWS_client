@@ -15,10 +15,9 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 	private final int interval;
 	private final Consumer<List<JSONObject>> logCallback;
 	private final Consumer<Map<String, JSONObject>> configCallback;
-	
-	private final Object updateConfigsLock = new Object();
-	private volatile boolean updateConfigs;
-	
+
+	private volatile Boolean updateConfigs;
+
 	private Map<String, JSONObject> configs = new ConcurrentHashMap<>();
 
 	public ConfigLogDAO(Socket server, int interval, Consumer<List<JSONObject>> logCallback, Consumer<Map<String, JSONObject>> configCallback) {
@@ -30,7 +29,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 
 	@Override
 	public void updateConfigs() {
-		synchronized (updateConfigsLock) {
+		synchronized (updateConfigs) {
 			updateConfigs = true;
 		}
 	}
@@ -45,7 +44,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 	@Override
 	public void run() {
 		while(true) {
-			synchronized (updateConfigsLock) {
+			synchronized (updateConfigs) {
 				// TODO stuff with updateConfigsLock
 				this.updateConfigs = false;
 			}

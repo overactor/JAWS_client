@@ -56,6 +56,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 		long lastLogUpdate = -1;
 
 		while(true) {
+			long lastStartingTime = System.currentTimeMillis();
 
 			JSONObject requestJson = new JSONObject();
 
@@ -129,6 +130,12 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 				}
 			} catch (IOException e) {
 				throw new RuntimeException(e);
+			}
+			
+			try {
+				Thread.sleep(Math.max(interval - (System.currentTimeMillis() - lastStartingTime), 0));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}

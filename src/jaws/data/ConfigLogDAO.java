@@ -1,11 +1,20 @@
 package jaws.data;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ConfigLogDAO implements ConfigDAO, Runnable {
@@ -58,7 +67,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 			}
 
 			synchronized (updateConfigs) {
-				// TODO stuff with updateConfigsLock
+				// TODO stuff with updateConfigs
 				if(updateConfigs) {
 					JSONObject updateConfigsJson = new JSONObject();
 					requestJson.put("updateConfigs", updateConfigsJson);
@@ -68,8 +77,59 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 			}
 			synchronized (configsToSave) {
 				// TODO Do stuff with configs
+				if(configsToSave.size() > 0) {
+					JSONObject configsToSaveJson = new JSONObject();
+					requestJson.put("saveConfigs", configsToSaveJson);
+					
+					for(Entry<String, JSONObject> configToSaveJson : configsToSave.entrySet()) {
+						configsToSaveJson.put(configToSaveJson.getKey(), configToSaveJson.getValue());
+					}
+					
+					configsToSave.clear();
+				}
 			}
 			// TODO write to and read from socket
+			try {
+				OutputStream out = server.getOutputStream();
+				out.write(requestJson.toString().getBytes());
+				
+				BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
+				StringBuilder stringBuilder = new StringBuilder();
+				{
+					String line;
+					while((line = in.readLine()) != null) {
+						stringBuilder.append(line);
+					}
+				}
+				JSONObject response = new JSONObject(stringBuilder.toString());
+				
+				if(response.has("logUpdate")) {
+					JSONObject logUpdate = response.getJSONObject("logUpdate");
+					lastLogUpdate = logUpdate.getLong("lastUpdate");
+					JSONArray logsJson = logUpdate.getJSONArray("logs");
+					List<JSONObject> logs = new ArrayList<>();
+					for(int i=0; i<logsJson.length(); i++) {
+						logs.add(logsJson.getJSONObject(i));
+					}
+					
+					logCallback.accept(logs);
+				}
+				
+				if(response.has("configUpdate")) {
+					JSONObject configUpdate = response.getJSONObject("configUpdate");
+					Map<String, JSONObject> newConfigs = new HashMap<>();
+					Iterator<String> keys = configUpdate.keys();
+					while(keys.hasNext()) {
+						String key = keys.next();
+						JSONObject log = configUpdate.getJSONObject(key);
+						newConfigs.put(key, log);
+					}
+					
+					configCallback.accept(newConfigs);
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package jaws.business.presets;
 
+import jaws.business.config.Config;
 
 /**
  * A class to represent saved config presets for JAWS
@@ -10,11 +11,7 @@ public class Preset {
 	
 	String name;
 	
-	String webroot;
-	int port;
-	int threads;
-	
-	String logPath;
+	Config config;
 	String logTags;
 	int logLevel;
 	
@@ -30,61 +27,19 @@ public class Preset {
 	}
 	
 	/**
-	 * @return the webroot
+	 * @return the config
 	 */
-	public String getWebroot() {
-		return webroot;
+	public Config getConfig() {
+		return config;
 	}
-	
+
 	/**
-	 * @param webroot the webroot to set
+	 * @param config the config to set
 	 */
-	public void setWebroot(String webroot) {
-		this.webroot = webroot;
+	public void setConfig(Config config) {
+		this.config = config;
 	}
-	
-	/**
-	 * @return the port
-	 */
-	public int getPort() {
-		return port;
-	}
-	
-	/**
-	 * @param port the port to set
-	 */
-	public void setPort(int port) {
-		this.port = port;
-	}
-	
-	/**
-	 * @return the threads
-	 */
-	public int getThreads() {
-		return threads;
-	}
-	
-	/**
-	 * @param threads the threads to set
-	 */
-	public void setThreads(int threads) {
-		this.threads = threads;
-	}
-	
-	/**
-	 * @return the logPath
-	 */
-	public String getLogPath() {
-		return logPath;
-	}
-	
-	/**
-	 * @param logPath the logPath to set
-	 */
-	public void setLogPath(String logPath) {
-		this.logPath = logPath;
-	}
-	
+
 	/**
 	 * @return the logTags
 	 */

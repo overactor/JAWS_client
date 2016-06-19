@@ -2,6 +2,10 @@ package jaws.business.presets;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
+import jaws.business.config.Config;
+
 final public class PresetFactory {
 	
 	private PresetFactory() {}
@@ -24,5 +28,16 @@ final public class PresetFactory {
 
 	public static void deletePreset(String name) {
 		// TODO: delete preset
+	}
+	
+	public static Preset presetFromJSON(String name, JSONObject json) {
+		
+		Preset preset = createPreset(name);
+		
+		preset.setConfig(Config.from(json.getJSONObject("config")));
+		preset.setLogLevel(json.getInt("logLevel"));
+		preset.setLogTags(json.getString("logTags"));
+		
+		return preset;
 	}
 }

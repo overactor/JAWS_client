@@ -1,5 +1,7 @@
 package jaws.business.config;
 
+import org.json.JSONObject;
+
 public class Config {
 	
 	private String webroot;
@@ -62,5 +64,37 @@ public class Config {
 	 */
 	public void setLogPath(String logPath) {
 		this.logPath = logPath;
+	}
+	
+	/**
+	 * @return the config as a JSON Object
+	 */
+	public JSONObject toJSON() {
+		
+		JSONObject json = new JSONObject();
+		
+		json.put("webroot", webroot);
+		json.put("port", port);
+		json.put("threads", threads);
+		json.put("logPath", logPath);
+		
+		return json;
+	}
+	
+	/**
+	 * @param json the JSON Object to parse
+	 * 
+	 * @return the Config represented by the JSON Object
+	 */
+	public static Config from(JSONObject json) {
+		
+		Config config = new Config();
+		
+		config.webroot = json.getString("webroot");
+		config.port = json.getInt("port");
+		config.threads = json.getInt("threads");
+		config.logPath = json.getString("logPath");
+		
+		return config;
 	}
 }

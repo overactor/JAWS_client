@@ -126,8 +126,7 @@ public class ConfigController {
 		logsModel.setPredicate(log -> log.getLogLevel().getLevel() >= configView.getLogLevel().getLevel()
 		                              &&  Arrays.stream(configView.getLogTags().split(","))
 		                                        .map(String::toLowerCase)
-		                                        .filter(tag -> tag.equals(log.getTag()))
-		                                        .count() > 0
+		                                        .anyMatch(tag -> tag.equals(log.getTag()))
 		);
 		
 		configView = new ConfigView(presetDelegate, configDelegate, menuDelegate,

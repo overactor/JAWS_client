@@ -1,10 +1,10 @@
 package jaws.start;
 
-import jaws.presentation.views.ConfigView;
+import jaws.presentation.controllers.ConfigController;
 
 public class Starter {
 
 	public static void main(String[] args) {
-		new ConfigView(null, null, null);
+		new ConfigController();
 	}
 }

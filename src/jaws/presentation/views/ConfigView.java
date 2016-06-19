@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,6 +19,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
@@ -25,23 +27,25 @@ import jaws.presentation.controllers.ConfigDelegate;
 import jaws.presentation.controllers.MenuDelegate;
 import jaws.presentation.controllers.PresetDelegate;
 
+/**
+ * A class representing the main view of the JAWS config-client
+ * 
+ * @author Rik
+ */
 public class ConfigView extends JFrame {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -9041765805686943532L;
 
 	JComboBox<String> presetCombo;
 
 	JTextField webrootField;
-	JSpinner httpPortSpinner, threadSpinner;
 
 	JList<String> logList;
 	JTextField logPathField;
 	JButton applyButton, resetButton, onOffButton;
 
-	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate, MenuDelegate menuDelegate) {
+	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate, MenuDelegate menuDelegate,
+			ListModel<String> logsModel, SpinnerModel httpPortModel, SpinnerModel threadModel) {
 
 		super("JAWS config client");
 
@@ -91,13 +95,11 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, webrootField, 1, 1, 5, 1);
 
 		addWithConstraints(pane, new JLabel("Port HTTP"), 0, 2);
-		SpinnerModel model = new SpinnerNumberModel(80, 1, 65536, 1);
-		httpPortSpinner = new JSpinner(model);
+		JSpinner httpPortSpinner = new JSpinner(httpPortModel);
 		addWithConstraints(pane, httpPortSpinner, 1, 2, 2, 1);
 
 		addWithConstraints(pane, new JLabel("Threads"), 3, 2);
-		model = new SpinnerNumberModel(10, 1, 9999, 1);
-		threadSpinner = new JSpinner(model);
+		JSpinner threadSpinner = new JSpinner(threadModel);
 		addWithConstraints(pane, threadSpinner, 4, 2, 2, 1, 0, 0);
 
 		// loglogPanel.add(logPathPanel, BorderLayout.NORTH);
@@ -106,7 +108,7 @@ public class ConfigView extends JFrame {
 		logPathField = new JTextField();
 		addWithConstraints(pane, logPathField, 1, 3, 5, 1);
 
-		logList = new JList<String>();
+		logList = new JList<>(logsModel);
 		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 6, 1, 6, 6);
 
 		applyButton = new JButton("apply");
@@ -123,6 +125,56 @@ public class ConfigView extends JFrame {
 		setBounds(200, 200, 500, 600);
 		setMinimumSize(new Dimension(450, 550));
 		setVisible(true);
+	}
+	
+	/**
+	 * Populates the preset combobox
+	 * 
+	 * @param names the names of the presets to populate the combobox with
+	 */
+	public void setPresetNames(List<String> names) {
+		
+		presetCombo.removeAll();
+		names.stream().forEach(presetCombo::addItem);
+	}
+	
+	/**
+	 * @return the name of the currently selected preset
+	 */
+	public String getPresetName() {
+		return presetCombo.getItemAt(presetCombo.getSelectedIndex());
+	}
+	
+	/**
+	 * @return the webroot as specified in the GUI
+	 */
+	public String getWebroot() {
+		return webrootField.getText();
+	}
+	
+	/**
+	 * Sets the webroot setting in the GUI
+	 * 
+	 * @param webroot the webroot to set to
+	 */
+	public void setWebroot(String webroot) {
+		webrootField.setText(webroot);
+	}
+	
+	/**
+	 * @return the path where the logs are saved on the server as specified in the GUI
+	 */
+	public String getLogPath() {
+		return logPathField.getText();
+	}
+	
+	/**
+	 * Sets the logPath setting in the GUI
+	 * 
+	 * @param logPath the logPath to ste to
+	 */
+	public void setLogPath(String logPath) {
+		logPathField.setText(logPath);
 	}
 
 	private static void addWithConstraints(Container container, JComponent component,

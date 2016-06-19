@@ -21,8 +21,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 
+import jal.business.log.LogLevel;
 import jaws.presentation.controllers.ConfigDelegate;
 import jaws.presentation.controllers.MenuDelegate;
 import jaws.presentation.controllers.PresetDelegate;
@@ -40,8 +40,11 @@ public class ConfigView extends JFrame {
 
 	JTextField webrootField;
 
-	JList<String> logList;
 	JTextField logPathField;
+	JList<String> logList;
+	JTextField logTagsField;
+	JComboBox<LogLevel> logLevelCombo;
+	
 	JButton applyButton, resetButton, onOffButton;
 
 	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate, MenuDelegate menuDelegate,
@@ -102,25 +105,38 @@ public class ConfigView extends JFrame {
 		JSpinner threadSpinner = new JSpinner(threadModel);
 		addWithConstraints(pane, threadSpinner, 4, 2, 2, 1, 0, 0);
 
-		// loglogPanel.add(logPathPanel, BorderLayout.NORTH);
-
+		// logs
 		addWithConstraints(pane, new JLabel("Logs"), 0, 3);
 		logPathField = new JTextField();
 		addWithConstraints(pane, logPathField, 1, 3, 5, 1);
 
 		logList = new JList<>(logsModel);
 		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 6, 1, 6, 6);
-
+		
+		addWithConstraints(pane, new JLabel("Tags"), 0, 5);
+		logTagsField = new JTextField();
+		addWithConstraints(pane, logTagsField, 1, 5, 5, 1);
+		
+		addWithConstraints(pane, new JLabel("Log-Level"), 0, 6);
+		logLevelCombo = new JComboBox<>();
+		logLevelCombo.addItem(LogLevel.DEBUG);
+		logLevelCombo.addItem(LogLevel.INFO);
+		logLevelCombo.addItem(LogLevel.WARNING);
+		logLevelCombo.addItem(LogLevel.ERROR);
+		addWithConstraints(pane, logLevelCombo, 1, 6, 5, 1);
+		
+		// bottom
 		applyButton = new JButton("apply");
 		applyButton.addActionListener(ae -> configDelegate.applyClicked());
-		addWithConstraints(pane, applyButton, 0, 5);
+		addWithConstraints(pane, applyButton, 0, 7);
+		
 		resetButton = new JButton("reset");
 		resetButton.addActionListener(ae -> configDelegate.resetClicked());
-		addWithConstraints(pane, resetButton, 1, 5);
+		addWithConstraints(pane, resetButton, 1, 7);
 
 		onOffButton = new JButton("on/off");
 		onOffButton.addActionListener(ae -> configDelegate.onOffClicked());
-		addWithConstraints(pane, onOffButton, 5, 5);
+		addWithConstraints(pane, onOffButton, 5, 7);
 
 		setBounds(200, 200, 500, 600);
 		setMinimumSize(new Dimension(450, 550));
@@ -175,6 +191,13 @@ public class ConfigView extends JFrame {
 	 */
 	public void setLogPath(String logPath) {
 		logPathField.setText(logPath);
+	}
+	
+	/**
+	 * @return the minimum log level that gets shown.
+	 */
+	public LogLevel getLogLevel() {
+		return logLevelCombo.getItemAt(logLevelCombo.getSelectedIndex());
 	}
 
 	private static void addWithConstraints(Container container, JComponent component,

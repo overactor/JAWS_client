@@ -1,4 +1,4 @@
-package jaws.business;
+package jaws.presentation.controllers;
 
 public interface ConfigDelegate {
 

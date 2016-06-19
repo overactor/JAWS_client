@@ -21,9 +21,9 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
-import jaws.business.ConfigDelegate;
-import jaws.business.MenuDelegate;
-import jaws.business.PresetDelegate;
+import jaws.presentation.controllers.ConfigDelegate;
+import jaws.presentation.controllers.MenuDelegate;
+import jaws.presentation.controllers.PresetDelegate;
 
 public class ConfigView extends JFrame {
 

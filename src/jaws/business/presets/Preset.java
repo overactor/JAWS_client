@@ -1,5 +1,7 @@
 package jaws.business.presets;
 
+import org.json.JSONObject;
+
 import jaws.business.config.Config;
 
 /**
@@ -66,5 +68,19 @@ public class Preset {
 	 */
 	public void setLogLevel(int logLevel) {
 		this.logLevel = logLevel;
+	}
+	
+	/**
+	 * @return the preset as a JSON Object
+	 */
+	public JSONObject toJSON() {
+		
+		JSONObject json = new JSONObject();
+		
+		json.put("config", config.toJSON());
+		json.put("logLevel", logLevel);
+		json.put("logTags", logTags);
+		
+		return json;
 	}
 }

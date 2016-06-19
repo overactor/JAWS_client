@@ -15,11 +15,15 @@ import jaws.data.ConfigLogDAO;
 public class JAWSConfigConnection {
 	
 	ConfigDAO configDao;
+	Thread configDaoThread;
 	
-	JAWSConfigConnection(String server, int port, Consumer<List<Log>> logCallback, Consumer<Config> configCallback) {
-		configDao = new ConfigLogDAO(server, port, 500,
+	public JAWSConfigConnection(String server, int port, Consumer<List<Log>> logCallback, Consumer<Config> configCallback) {
+		ConfigLogDAO configLogDao = new ConfigLogDAO(server, port, 500,
 		                             logList -> logCallback.accept(logList.stream().map(Log::from).collect(Collectors.toList())),
 		                             configMap -> configCallback.accept(configFrom(configMap)));
+		configDao = configLogDao;
+		configDaoThread = new Thread(configLogDao);
+		configDaoThread.run();
 	}
 	
 	public void saveConfig(Config config) {		

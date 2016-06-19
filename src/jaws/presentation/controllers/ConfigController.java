@@ -6,12 +6,13 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 
 import jal.business.log.Log;
 import jaws.business.config.Config;
+import jaws.business.config.JAWSConfigConnection;
 import jaws.business.presets.Preset;
 import jaws.business.presets.PresetFactory;
-import jaws.data.ConfigLogDAO;
 import jaws.presentation.models.FilteredListModel;
 import jaws.presentation.views.ConfigView;
 
@@ -27,8 +28,7 @@ public class ConfigController {
 	private FilteredListModel<Log, String> logsModel;
 	SpinnerNumberModel httpPortModel, threadModel;
 	
-	private ConfigLogDAO configLogDAO;
-	private Thread configLogDAOThread;
+	private JAWSConfigConnection configConnection;
 	
 	public ConfigController() {
 		
@@ -61,8 +61,7 @@ public class ConfigController {
 			@Override
 			public void resetClicked() {
 
-				if(configLogDAO != null)
-					configLogDAO.updateConfigs();
+				
 			}
 			
 			@Override
@@ -74,7 +73,13 @@ public class ConfigController {
 			@Override
 			public void applyClicked() {
 
+				Config configToSave = new Config();
+				configToSave.setLogPath(configView.getLogPath());
+				configToSave.setPort((int) httpPortModel.getValue());
+				configToSave.setThreads((int) threadModel.getValue());
+				configToSave.setWebroot(configView.getWebroot());
 				
+				configConnection.saveConfig(configToSave);
 			}
 		};
 		
@@ -107,9 +112,14 @@ public class ConfigController {
 					port = tryCatch(() -> Integer.parseInt(host.split(":")[1])).orElse(8080);
 				}
 				
-				configLogDAO = new ConfigLogDAO(hostname, port, 5, null, null);
-				configLogDAOThread = new Thread(configLogDAO);
-				configLogDAOThread.run();
+				configConnection = new JAWSConfigConnection(hostname, port,
+				                                            logs -> logs.forEach(logsModel::add),
+				                                            config -> SwingUtilities.invokeLater(() -> {
+				                                            	configView.setLogPath(config.getLogPath());
+				                                            	httpPortModel.setValue(config.getPort());
+				                                            	threadModel.setValue(config.getThreads());
+				                                            	configView.setWebroot(config.getWebroot());
+				                                            }));
 			}
 		};
 		

@@ -2,6 +2,8 @@ package jaws.presentation.controllers;
 
 import static trycrash.Try.tryCatch;
 
+import java.util.Arrays;
+
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
@@ -112,7 +114,11 @@ public class ConfigController {
 		};
 		
 		logsModel.setPredicate(log -> log.getLogLevel().getLevel() >= configView.getLogLevel().getLevel()
-		                              &&  configView.getLogTags().toLowerCase().contains(log.getTag().toLowerCase()));
+		                              &&  Arrays.stream(configView.getLogTags().split(","))
+		                                        .map(String::toLowerCase)
+		                                        .filter(tag -> tag.equals(log.getTag()))
+		                                        .count() > 0
+		);
 		
 		configView = new ConfigView(presetDelegate, configDelegate, menuDelegate,
 		                            logsModel, logsModel::refresh, httpPortModel, threadModel);

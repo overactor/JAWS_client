@@ -44,11 +44,10 @@ public class ConfigView extends JFrame {
 	JList<String> logList;
 	JTextField logTagsField;
 	JComboBox<LogLevel> logLevelCombo;
-	
-	JButton applyButton, resetButton, onOffButton;
 
 	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate, MenuDelegate menuDelegate,
-			ListModel<String> logsModel, SpinnerModel httpPortModel, SpinnerModel threadModel) {
+			ListModel<String> logsModel, Runnable applyFiltersButtonClicked,
+			SpinnerModel httpPortModel, SpinnerModel threadModel) {
 
 		super("JAWS config client");
 
@@ -123,18 +122,20 @@ public class ConfigView extends JFrame {
 		logLevelCombo.addItem(LogLevel.INFO);
 		logLevelCombo.addItem(LogLevel.WARNING);
 		logLevelCombo.addItem(LogLevel.ERROR);
-		addWithConstraints(pane, logLevelCombo, 1, 6, 5, 1);
+		addWithConstraints(pane, logLevelCombo, 1, 6, 4, 1);
+		JButton applyFiltersButton = new JButton("apply");
+		applyFiltersButton.addActionListener(ae -> applyFiltersButtonClicked.run());
 		
 		// bottom
-		applyButton = new JButton("apply");
+		JButton applyButton = new JButton("apply");
 		applyButton.addActionListener(ae -> configDelegate.applyClicked());
 		addWithConstraints(pane, applyButton, 0, 7);
 		
-		resetButton = new JButton("reset");
+		JButton resetButton = new JButton("reset");
 		resetButton.addActionListener(ae -> configDelegate.resetClicked());
 		addWithConstraints(pane, resetButton, 1, 7);
 
-		onOffButton = new JButton("on/off");
+		JButton onOffButton = new JButton("on/off");
 		onOffButton.addActionListener(ae -> configDelegate.onOffClicked());
 		addWithConstraints(pane, onOffButton, 5, 7);
 

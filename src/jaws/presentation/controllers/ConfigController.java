@@ -111,8 +111,11 @@ public class ConfigController {
 			}
 		};
 		
+		logsModel.setPredicate(log -> log.getLogLevel().getLevel() >= configView.getLogLevel().getLevel()
+		                              &&  configView.getLogTags().toLowerCase().contains(log.getTag().toLowerCase()));
+		
 		configView = new ConfigView(presetDelegate, configDelegate, menuDelegate,
-		                            logsModel, httpPortModel, threadModel);
+		                            logsModel, logsModel::refresh, httpPortModel, threadModel);
 	}
 	
 	private Preset presetFromGUI() {

@@ -44,15 +44,13 @@ public class ConfigController {
 			}
 			
 			@Override
-			public void newPresetClicked() {
-
-				
+			public void deletePresetClicked() {
+				PresetFactory.deletePreset(ConfigController.this.configView.getPresetName());
 			}
 			
 			@Override
 			public void loadPresetClicked() {
-
-				
+				ConfigController.this.setPreset(PresetFactory.loadPreset(ConfigController.this.configView.getPresetName()));
 			}
 		};
 		
@@ -123,5 +121,13 @@ public class ConfigController {
 	
 	private Config configFromGUI() {
 		return null; // TODO: create config.
+	}
+	
+	private void setPreset(Preset preset) {
+		// TODO: set fields in GUI
+	}
+	
+	private void setConfig(Config config) {
+		// TODO: set fields in GUI
 	}
 }

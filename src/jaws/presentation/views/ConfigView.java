@@ -84,11 +84,11 @@ public class ConfigView extends JFrame {
 		loadPresetButton.addActionListener(ae -> presetDelegate.loadPresetClicked());
 		JButton savePresetButton = new JButton("save");
 		savePresetButton.addActionListener(ae -> presetDelegate.savePresetClicked());
-		JButton newPresetButton = new JButton("new");
-		newPresetButton.addActionListener(ae -> presetDelegate.newPresetClicked());
+		JButton deletePresetButton = new JButton("delete");
+		deletePresetButton.addActionListener(ae -> presetDelegate.deletePresetClicked());
 		addWithConstraints(pane, loadPresetButton, 3, 0);
 		addWithConstraints(pane, savePresetButton, 4, 0);
-		addWithConstraints(pane, newPresetButton, 5, 0);
+		addWithConstraints(pane, deletePresetButton, 5, 0);
 
 		addWithConstraints(pane, new JLabel("Webroot"), 0, 1);
 		webrootField = new JTextField();

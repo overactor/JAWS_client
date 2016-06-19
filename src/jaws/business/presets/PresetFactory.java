@@ -6,7 +6,7 @@ final public class PresetFactory {
 	
 	private PresetFactory() {}
 	
-	public static Preset loadPreset() {
+	public static Preset loadPreset(String name) {
 		return null; // TODO: load preset
 	}
 	
@@ -20,5 +20,9 @@ final public class PresetFactory {
 	
 	public static List<String> getPresetNames() {
 		return null; // TODO: get preset names
+	}
+
+	public static void deletePreset(String name) {
+		// TODO: delete preset
 	}
 }

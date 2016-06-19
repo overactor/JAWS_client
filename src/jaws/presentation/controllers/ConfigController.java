@@ -116,18 +116,37 @@ public class ConfigController {
 	}
 	
 	private Preset presetFromGUI() {
-		return null; // TODO: create preset.
+		
+		Preset preset = PresetFactory.createPreset(configView.getPresetName());
+		// TODO: set preset stuff.
+		preset.setConfig(configFromGUI());
+		
+		return preset;
 	}
 	
 	private Config configFromGUI() {
-		return null; // TODO: create config.
+		
+		Config config = new Config();
+		
+		config.setWebroot(configView.getWebroot());
+		config.setLogPath(configView.getLogPath());
+		config.setPort(httpPortModel.getNumber().intValue());
+		config.setThreads(threadModel.getNumber().intValue());
+		
+		return config;
 	}
 	
 	private void setPreset(Preset preset) {
-		// TODO: set fields in GUI
+
+		// TODO: set preset stuff
+		setConfig(preset.getConfig());
 	}
 	
 	private void setConfig(Config config) {
-		// TODO: set fields in GUI
+
+		configView.setWebroot(config.getWebroot());
+		configView.setLogPath(config.getLogPath());
+		httpPortModel.setValue(config.getPort());
+		threadModel.setValue(config.getThreads());
 	}
 }

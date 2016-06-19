@@ -1,14 +1,17 @@
 package jaws.presentation.controllers;
 
+import static trycrash.Try.tryCatch;
+
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
 import jal.business.log.Log;
+import jaws.business.config.Config;
+import jaws.business.presets.Preset;
+import jaws.business.presets.PresetFactory;
 import jaws.data.ConfigLogDAO;
 import jaws.presentation.models.FilteredListModel;
 import jaws.presentation.views.ConfigView;
-
-import static trycrash.Try.tryCatch;
 
 /**
  * A controller class for the JAWS config-client
@@ -35,8 +38,9 @@ public class ConfigController {
 			
 			@Override
 			public void savePresetClicked() {
-
 				
+				Preset preset = ConfigController.this.presetFromGUI();
+				PresetFactory.savePreset(preset);
 			}
 			
 			@Override
@@ -111,5 +115,13 @@ public class ConfigController {
 		
 		configView = new ConfigView(presetDelegate, configDelegate, menuDelegate,
 		                            logsModel, httpPortModel, threadModel);
+	}
+	
+	private Preset presetFromGUI() {
+		return null; // TODO: create preset.
+	}
+	
+	private Config configFromGUI() {
+		return null; // TODO: create config.
 	}
 }

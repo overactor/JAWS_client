@@ -9,11 +9,11 @@ import jaws.business.config.Config;
  */
 public class Preset {
 	
-	String name;
+	private String name;
 	
-	Config config;
-	String logTags;
-	int logLevel;
+	private Config config;
+	private String logTags;
+	private int logLevel;
 	
 	Preset(String name) {
 		this.name = name;

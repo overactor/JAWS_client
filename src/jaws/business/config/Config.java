@@ -2,11 +2,11 @@ package jaws.business.config;
 
 public class Config {
 	
-	String webroot;
-	int port;
-	int threads;
+	private String webroot;
+	private int port;
+	private int threads;
 	
-	String logPath;
+	private String logPath;
 	
 	/**
 	 * @return the webroot

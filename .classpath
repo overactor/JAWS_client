@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/json-20160212.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JAL"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/TryCrash"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

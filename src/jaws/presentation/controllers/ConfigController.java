@@ -1,10 +1,14 @@
 package jaws.presentation.controllers;
 
+import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
 import jal.business.log.Log;
+import jaws.data.ConfigLogDAO;
 import jaws.presentation.models.FilteredListModel;
 import jaws.presentation.views.ConfigView;
+
+import static trycrash.Try.tryCatch;
 
 /**
  * A controller class for the JAWS config-client
@@ -17,6 +21,9 @@ public class ConfigController {
 	
 	private FilteredListModel<Log, String> logsModel;
 	SpinnerNumberModel httpPortModel, threadModel;
+	
+	private ConfigLogDAO configLogDAO;
+	private Thread configLogDAOThread;
 	
 	public ConfigController() {
 		
@@ -50,7 +57,8 @@ public class ConfigController {
 			@Override
 			public void resetClicked() {
 
-				
+				if(configLogDAO != null)
+					configLogDAO.updateConfigs();
 			}
 			
 			@Override
@@ -83,7 +91,21 @@ public class ConfigController {
 			@Override
 			public void connectClicked() {
 
+				String host = (String) JOptionPane.showInputDialog(configView,
+				                                                   "Enter the server to connect to (hostname:port)",
+				                                                   "Connect...",
+				                                                   JOptionPane.PLAIN_MESSAGE);
+				String hostname = "";
+				int port = 8080;
 				
+				if(host.contains(":")) {
+					hostname = host.split(":")[0];
+					port = tryCatch(() -> Integer.parseInt(host.split(":")[1])).orElse(8080);
+				}
+				
+				configLogDAO = new ConfigLogDAO(hostname, port, 5, null, null);
+				configLogDAOThread = new Thread(configLogDAO);
+				configLogDAOThread.run();
 			}
 		};
 		

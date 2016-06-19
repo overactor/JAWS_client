@@ -14,6 +14,6 @@ public class JAWSConfigConnection {
 	ConfigDAO configDao;
 	
 	JAWSConfigConnection(String server, int port, Consumer<List<JSONObject>> logCallback, Consumer<Map<String, JSONObject>> configCallback) {
-		configDao = new ConfigLogDAO(server, port, 1, logCallback, configCallback);
+		configDao = new ConfigLogDAO(server, port, 500, logCallback, configCallback);
 	}
 }

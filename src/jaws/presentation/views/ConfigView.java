@@ -187,7 +187,7 @@ public class ConfigView extends JFrame {
 	/**
 	 * Sets the logPath setting in the GUI
 	 * 
-	 * @param logPath the logPath to ste to
+	 * @param logPath the logPath to display in the GUI
 	 */
 	public void setLogPath(String logPath) {
 		logPathField.setText(logPath);
@@ -198,6 +198,19 @@ public class ConfigView extends JFrame {
 	 */
 	public LogLevel getLogLevel() {
 		return logLevelCombo.getItemAt(logLevelCombo.getSelectedIndex());
+	}
+	
+	/**
+	 * Sets the log tags the logs are filtered by in the GUI.
+	 * 
+	 * @param tags the log tags to display in the GUI
+	 */
+	public void setLogTags(String tags) {
+		logTagsField.setText(tags);
+	}
+	
+	public String getLogTags() {
+		return logTagsField.getText();
 	}
 
 	private static void addWithConstraints(Container container, JComponent component,

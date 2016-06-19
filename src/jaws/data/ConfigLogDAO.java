@@ -36,6 +36,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 		this.interval = interval;
 		this.logCallback = logCallback;
 		this.configCallback = configCallback;
+		updateConfigs = false;
 	}
 
 	@Override

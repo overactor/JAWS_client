@@ -23,11 +23,16 @@ public class JAWSConfigConnection {
 		                             configMap -> configCallback.accept(configFrom(configMap)));
 		configDao = configLogDao;
 		configDaoThread = new Thread(configLogDao);
-		configDaoThread.run();
+		configDaoThread.start();
 	}
 	
 	public void saveConfig(Config config) {		
 		configDao.saveConfigs(toJSONMap(config));
+	}
+	
+	public void close() {
+		
+		configDaoThread.interrupt();
 	}
 	
 	private Map<String, JSONObject> toJSONMap(Config config) {

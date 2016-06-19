@@ -121,6 +121,14 @@ public class ConfigController {
 				                                            	configView.setWebroot(config.getWebroot());
 				                                            }));
 			}
+			
+			@Override
+			public void disconnectClicked() {
+				
+				if(configConnection != null)
+					configConnection.close();
+				configConnection = null;
+			}
 		};
 		
 		logsModel.setPredicate(log -> log.getLogLevel().getLevel() >= configView.getLogLevel().getLevel()

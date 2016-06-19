@@ -59,6 +59,8 @@ public class ConfigView extends JFrame {
 		// main menu
 		JMenuItem connectItem = new JMenuItem("connect");
 		connectItem.addActionListener(ae -> menuDelegate.connectClicked());
+		JMenuItem disconnectItem = new JMenuItem("disconnect");
+		disconnectItem.addActionListener(ae -> menuDelegate.disconnectClicked());
 		JMenuItem importItem = new JMenuItem("import");
 		importItem.addActionListener(ae -> menuDelegate.importClicked());
 		JMenuItem exportItem = new JMenuItem("export");
@@ -66,6 +68,7 @@ public class ConfigView extends JFrame {
 
 		JMenu connectionMenu = new JMenu("connection");
 		connectionMenu.add(connectItem);
+		connectionMenu.add(disconnectItem);
 
 		JMenu importExportMenu = new JMenu("import/export");
 		importExportMenu.add(importItem);

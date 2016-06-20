@@ -8,15 +8,20 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.json.JSONObject;
 
 class FilePresetDAO implements PresetDAO {
 	
-	File file;
+	private File file;
+	private Supplier<Optional<File>> saveFilePicker;
+	private Supplier<Optional<File>> openFilePicker;
 	
-	FilePresetDAO(String filePath) {		
+	FilePresetDAO(String filePath, Supplier<Optional<File>> saveFilePicker, Supplier<Optional<File>> openFilePicker) {		
 		file = new File(filePath);
+		this.saveFilePicker = saveFilePicker;
+		this.openFilePicker = openFilePicker;
 	}
 
 	@Override
@@ -47,18 +52,22 @@ class FilePresetDAO implements PresetDAO {
 	@Override
 	public void exportPreset(JSONObject json) {
 		
-		// TODO Auto-generated method stub
-
+		saveFilePicker.get()
+		              .ifPresent(file -> saveJSON(json, file));
 	}
 
 	@Override
 	public Optional<JSONObject> importPreset() {
 		
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return openFilePicker.get()
+		                     .flatMap(this::getJSON);
+	}
+
+	private Optional<JSONObject> getJSON() {
+		return getJSON(file);
 	}
 	
-	private Optional<JSONObject> getJSON() {
+	private Optional<JSONObject> getJSON(File file) {
 		
 		return tryCatch(() -> {
 			file.createNewFile();
@@ -67,6 +76,10 @@ class FilePresetDAO implements PresetDAO {
 	}
 	
 	private void saveJSON(JSONObject json) {
+		saveJSON(json, file);
+	}
+		
+	private void saveJSON(JSONObject json, File file) {
 		
 		try (PrintWriter out = new PrintWriter(file)) {
 			file.createNewFile();

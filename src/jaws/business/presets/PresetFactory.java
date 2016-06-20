@@ -1,7 +1,9 @@
 package jaws.business.presets;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import org.json.JSONObject;
 
@@ -12,9 +14,13 @@ import jaws.data.preset.PresetDAOFactory;
 
 final public class PresetFactory {
 	
-	private static PresetDAO presetDAO = PresetDAOFactory.createPresetDAO();
+	private static PresetDAO presetDAO;
 	
 	private PresetFactory() {}
+	
+	public static void init(Supplier<Optional<File>> saveFilePicker, Supplier<Optional<File>> openFilePicker) {
+		presetDAO = PresetDAOFactory.createPresetDAO(saveFilePicker, openFilePicker);
+	}
 	
 	public static void exportPreset(Preset preset) {
 		presetDAO.exportPreset(preset.toJSON());

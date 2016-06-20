@@ -3,13 +3,14 @@ package jaws.presentation.controllers;
 import static trycrash.Try.tryCatch;
 
 import java.util.Arrays;
+import java.util.Optional;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 import jal.business.log.Log;
-import jal.business.log.LogLevel;
 import jaws.business.config.Config;
 import jaws.business.config.JAWSConfigConnection;
 import jaws.business.presets.Preset;
@@ -105,8 +106,11 @@ public class ConfigController {
 			@Override
 			public void importClicked() {
 
-				PresetFactory.importPreset()
-	                         .ifPresent(ConfigController.this::setPreset);
+				PresetFactory.importPreset().ifPresent(preset -> { 
+					ConfigController.this.setPreset(preset);
+					ConfigController.this.configView.setPresetName(preset.getName());
+					PresetFactory.savePreset(preset);
+				});
 			}
 			
 			@Override
@@ -151,6 +155,16 @@ public class ConfigController {
 		
 		configView = new ConfigView(presetDelegate, configDelegate, menuDelegate,
 		                            logsModel, logsModel::refresh, httpPortModel, threadModel);
+		JFileChooser fileChooser = new JFileChooser();
+		PresetFactory.init(() -> {
+			return fileChooser.showSaveDialog(configView) == JFileChooser.APPROVE_OPTION 
+					? Optional.ofNullable(fileChooser.getSelectedFile())
+					: Optional.empty();
+		}, () -> {
+			return fileChooser.showOpenDialog(configView) == JFileChooser.APPROVE_OPTION 
+					? Optional.ofNullable(fileChooser.getSelectedFile())
+					: Optional.empty();
+		});
 		configView.setPresetNames(PresetFactory.getPresetNames());
 	}
 	

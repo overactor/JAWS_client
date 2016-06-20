@@ -1,10 +1,13 @@
 package jaws.data.preset;
 
-import static trycrash.Try.tryCrash;
+import static trycrash.Try.tryCatch;
 
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.Optional;
+import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -12,37 +15,33 @@ class FilePresetDAO implements PresetDAO {
 	
 	File file;
 	
-	FilePresetDAO(String filePath) {
-		
+	FilePresetDAO(String filePath) {		
 		file = new File(filePath);
-		tryCrash(() -> file.createNewFile());
 	}
 
 	@Override
-	public List<String> getPresetNames() {
-
-		return null;
+	public Set<String> getPresetNames() {
+		return getJSON().orElseGet(JSONObject::new).keySet();
 	}
 
 	@Override
-	public Optional<JSONObject> loadPreset(String name) {
-		
-		// TODO Auto-generated method stub
-		return Optional.empty();
+	public Optional<JSONObject> loadPreset(String name) {		
+		return getJSON().map(json -> json.optJSONObject(name));
 	}
 
 	@Override
 	public void savePreset(String name, JSONObject json) {
 		
-		// TODO Auto-generated method stub
-
+		saveJSON(getJSON().orElseGet(JSONObject::new)
+		                  .put(name, json));
 	}
 
 	@Override
 	public void deletePreset(String name) {
 		
-		// TODO Auto-generated method stub
-
+		JSONObject json = getJSON().orElseGet(JSONObject::new);
+        json.remove(name);
+        saveJSON(json);
 	}
 
 	@Override
@@ -57,5 +56,23 @@ class FilePresetDAO implements PresetDAO {
 		
 		// TODO Auto-generated method stub
 		return Optional.empty();
+	}
+	
+	private Optional<JSONObject> getJSON() {
+		
+		return tryCatch(() -> {
+			file.createNewFile();
+			return new JSONObject(new String(Files.readAllBytes(file.toPath())));
+		});
+	}
+	
+	private void saveJSON(JSONObject json) {
+		
+		try (PrintWriter out = new PrintWriter(file)) {
+			file.createNewFile();
+			out.println(json.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

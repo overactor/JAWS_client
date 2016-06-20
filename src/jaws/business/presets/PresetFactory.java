@@ -1,6 +1,6 @@
 package jaws.business.presets;
 
-import java.util.List;
+import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -22,7 +22,7 @@ final public class PresetFactory {
 		return new Preset(name);
 	}
 	
-	public static List<String> getPresetNames() {
+	public static Set<String> getPresetNames() {
 		return null; // TODO: get preset names
 	}
 

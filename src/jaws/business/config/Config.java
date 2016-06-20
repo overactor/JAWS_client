@@ -71,14 +71,10 @@ public class Config {
 	 */
 	public JSONObject toJSON() {
 		
-		JSONObject json = new JSONObject();
-		
-		json.put("webroot", webroot);
-		json.put("port", port);
-		json.put("threads", threads);
-		json.put("logPath", logPath);
-		
-		return json;
+		return new JSONObject().put("webroot", webroot)
+		                       .put("port", port)
+                               .put("threads", threads)
+                               .put("logPath", logPath);
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package jaws.business.presets;
 
 import org.json.JSONObject;
 
+import jal.business.log.LogLevel;
 import jaws.business.config.Config;
 
 /**
@@ -15,7 +16,7 @@ public class Preset {
 	
 	private Config config;
 	private String logTags;
-	private int logLevel;
+	private LogLevel logLevel;
 	
 	Preset(String name) {
 		this.name = name;
@@ -59,14 +60,14 @@ public class Preset {
 	/**
 	 * @return the logLevel
 	 */
-	public int getLogLevel() {
+	public LogLevel getLogLevel() {
 		return logLevel;
 	}
 	
 	/**
 	 * @param logLevel the logLevel to set
 	 */
-	public void setLogLevel(int logLevel) {
+	public void setLogLevel(LogLevel logLevel) {
 		this.logLevel = logLevel;
 	}
 	
@@ -77,7 +78,7 @@ public class Preset {
 		
 		return new JSONObject().put("name", name)
 				               .put("config", config.toJSON())
-		                       .put("logLevel", logLevel)
+		                       .put("logLevel", logLevel.getLevel())
 		                       .put("logTags", logTags);
 	}
 }

@@ -9,6 +9,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 import jal.business.log.Log;
+import jal.business.log.LogLevel;
 import jaws.business.config.Config;
 import jaws.business.config.JAWSConfigConnection;
 import jaws.business.presets.Preset;
@@ -152,7 +153,7 @@ public class ConfigController {
 	private Preset presetFromGUI() {
 		
 		Preset preset = PresetFactory.createPreset(configView.getPresetName());
-		preset.setLogLevel(configView.getLogLevel().getLevel());
+		preset.setLogLevel(configView.getLogLevel());
 		preset.setLogTags(configView.getLogTags());
 		preset.setConfig(configFromGUI());
 		
@@ -173,7 +174,7 @@ public class ConfigController {
 	
 	private void setPreset(Preset preset) {
 		
-		// TODO: set logLevel in GUI
+		configView.setLogLevel(preset.getLogLevel());
 		configView.setLogTags(preset.getLogTags());
 		setConfig(preset.getConfig());
 	}

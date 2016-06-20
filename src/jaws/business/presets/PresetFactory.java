@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import jal.business.log.LogLevel;
 import jaws.business.config.Config;
 import jaws.data.preset.PresetDAO;
 import jaws.data.preset.PresetDAOFactory;
@@ -48,7 +49,7 @@ final public class PresetFactory {
 		Preset preset = createPreset(json.getString("name"));
 		
 		preset.setConfig(Config.from(json.getJSONObject("config")));
-		preset.setLogLevel(json.getInt("logLevel"));
+		preset.setLogLevel(LogLevel.withLevel(json.getInt("logLevel")));
 		preset.setLogTags(json.getString("logTags"));
 		
 		return preset;

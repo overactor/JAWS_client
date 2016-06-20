@@ -165,6 +165,15 @@ public class ConfigView extends JFrame {
 	}
 	
 	/**
+	 * Removes a preset by its name
+	 * 
+	 * @param name the preset to remove
+	 */
+	public void deletePreset(String name) {
+		presetCombo.removeItem(name);
+	}
+	
+	/**
 	 * Sets the logLevel setting in the GUI
 	 * 
 	 * @param level the logLevel to display in the GUI

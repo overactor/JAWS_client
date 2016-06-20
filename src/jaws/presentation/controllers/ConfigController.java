@@ -47,11 +47,15 @@ public class ConfigController {
 			
 			@Override
 			public void deletePresetClicked() {
-				PresetFactory.deletePreset(ConfigController.this.configView.getPresetName());
+				
+				String name = ConfigController.this.configView.getPresetName();
+				ConfigController.this.configView.deletePreset(name);
+				PresetFactory.deletePreset(name);
 			}
 			
 			@Override
 			public void loadPresetClicked() {
+				
 				PresetFactory.loadPreset(ConfigController.this.configView.getPresetName())
 				             .ifPresent(ConfigController.this::setPreset);
 			}

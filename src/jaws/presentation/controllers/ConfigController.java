@@ -52,7 +52,8 @@ public class ConfigController {
 			
 			@Override
 			public void loadPresetClicked() {
-				ConfigController.this.setPreset(PresetFactory.loadPreset(ConfigController.this.configView.getPresetName()));
+				PresetFactory.loadPreset(ConfigController.this.configView.getPresetName())
+				             .ifPresent(ConfigController.this::setPreset);
 			}
 		};
 		
@@ -88,13 +89,13 @@ public class ConfigController {
 			@Override
 			public void importClicked() {
 
-				
+				PresetFactory.importPreset()
+	                         .ifPresent(ConfigController.this::setPreset);
 			}
 			
 			@Override
 			public void exportClicked() {
-
-				
+				PresetFactory.exportPreset(ConfigController.this.presetFromGUI());
 			}
 			
 			@Override

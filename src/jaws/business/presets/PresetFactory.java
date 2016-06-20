@@ -1,21 +1,34 @@
 package jaws.business.presets;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.json.JSONObject;
 
 import jaws.business.config.Config;
+import jaws.data.preset.PresetDAO;
+import jaws.data.preset.PresetDAOFactory;
 
 final public class PresetFactory {
 	
+	private static PresetDAO presetDAO = PresetDAOFactory.createPresetDAO();
+	
 	private PresetFactory() {}
 	
-	public static Preset loadPreset(String name) {
-		return null; // TODO: load preset
+	public static void exportPreset(Preset preset) {
+		presetDAO.exportPreset(preset.toJSON());
+	}
+	
+	public static Optional<Preset> importPreset() {
+		return presetDAO.importPreset().map(PresetFactory::presetFromJSON);
+	}
+	
+	public static Optional<Preset> loadPreset(String name) {
+		return presetDAO.loadPreset(name).map(PresetFactory::presetFromJSON);
 	}
 	
 	public static void savePreset(Preset preset) {
-		// TODO: save preset
+		presetDAO.savePreset(preset.getName(), preset.toJSON());
 	}
 	
 	public static Preset createPreset(String name) {
@@ -23,16 +36,16 @@ final public class PresetFactory {
 	}
 	
 	public static Set<String> getPresetNames() {
-		return null; // TODO: get preset names
+		return presetDAO.getPresetNames();
 	}
 
 	public static void deletePreset(String name) {
-		// TODO: delete preset
+		presetDAO.deletePreset(name);
 	}
 	
-	public static Preset presetFromJSON(String name, JSONObject json) {
+	public static Preset presetFromJSON(JSONObject json) {
 		
-		Preset preset = createPreset(name);
+		Preset preset = createPreset(json.getString("name"));
 		
 		preset.setConfig(Config.from(json.getJSONObject("config")));
 		preset.setLogLevel(json.getInt("logLevel"));

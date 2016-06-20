@@ -105,13 +105,8 @@ public class ConfigController {
 				                                                   "Enter the server to connect to (hostname:port)",
 				                                                   "Connect...",
 				                                                   JOptionPane.PLAIN_MESSAGE);
-				String hostname = "";
-				int port = 8080;
-				
-				if(host.contains(":")) {
-					hostname = host.split(":")[0];
-					port = tryCatch(() -> Integer.parseInt(host.split(":")[1])).orElse(8080);
-				}
+				String hostname = host.split(":")[0];
+				int	port = tryCatch(() -> Integer.parseInt(host.split(":")[1])).orElse(8080);
 				
 				configConnection = new JAWSConfigConnection(hostname, port,
 				                                            logs -> logs.forEach(logsModel::add),

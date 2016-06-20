@@ -75,7 +75,8 @@ public class Preset {
 	 */
 	public JSONObject toJSON() {
 		
-		return new JSONObject().put("config", config.toJSON())
+		return new JSONObject().put("name", name)
+				               .put("config", config.toJSON())
 		                       .put("logLevel", logLevel)
 		                       .put("logTags", logTags);
 	}

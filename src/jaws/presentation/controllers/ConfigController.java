@@ -39,8 +39,7 @@ public class ConfigController {
 		PresetDelegate presetDelegate = new PresetDelegate() {
 			
 			@Override
-			public void savePresetClicked() {
-				
+			public void savePresetClicked() {				
 				Preset preset = ConfigController.this.presetFromGUI();
 				PresetFactory.savePreset(preset);
 			}
@@ -54,6 +53,18 @@ public class ConfigController {
 			public void loadPresetClicked() {
 				PresetFactory.loadPreset(ConfigController.this.configView.getPresetName())
 				             .ifPresent(ConfigController.this::setPreset);
+			}
+
+			@Override
+			public void newPresetClicked() {
+				
+				String presetName = (String) JOptionPane.showInputDialog(configView,
+                                                                         "Enter the name of the new preset",
+                                                                         "New preset",
+                                                                         JOptionPane.PLAIN_MESSAGE);
+				ConfigController.this.configView.setPresetName(presetName);
+				Preset preset = ConfigController.this.presetFromGUI();
+				PresetFactory.savePreset(preset);
 			}
 		};
 		
@@ -135,12 +146,14 @@ public class ConfigController {
 		
 		configView = new ConfigView(presetDelegate, configDelegate, menuDelegate,
 		                            logsModel, logsModel::refresh, httpPortModel, threadModel);
+		configView.setPresetNames(PresetFactory.getPresetNames());
 	}
 	
 	private Preset presetFromGUI() {
 		
 		Preset preset = PresetFactory.createPreset(configView.getPresetName());
-		// TODO: set preset stuff.
+		preset.setLogLevel(configView.getLogLevel().getLevel());
+		preset.setLogTags(configView.getLogTags());
 		preset.setConfig(configFromGUI());
 		
 		return preset;
@@ -159,8 +172,9 @@ public class ConfigController {
 	}
 	
 	private void setPreset(Preset preset) {
-
-		// TODO: set preset stuff
+		
+		// TODO: set logLevel in GUI
+		configView.setLogTags(preset.getLogTags());
 		setConfig(preset.getConfig());
 	}
 	

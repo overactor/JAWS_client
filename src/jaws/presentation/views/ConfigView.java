@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -91,13 +91,16 @@ public class ConfigView extends JFrame {
 		savePresetButton.addActionListener(ae -> presetDelegate.savePresetClicked());
 		JButton deletePresetButton = new JButton("delete");
 		deletePresetButton.addActionListener(ae -> presetDelegate.deletePresetClicked());
+		JButton newPresetButton = new JButton("new");
+		newPresetButton.addActionListener(ae -> presetDelegate.newPresetClicked());
 		addWithConstraints(pane, loadPresetButton, 3, 0);
 		addWithConstraints(pane, savePresetButton, 4, 0);
 		addWithConstraints(pane, deletePresetButton, 5, 0);
+		addWithConstraints(pane, newPresetButton, 6, 0);
 
 		addWithConstraints(pane, new JLabel("Webroot"), 0, 1);
 		webrootField = new JTextField();
-		addWithConstraints(pane, webrootField, 1, 1, 5, 1);
+		addWithConstraints(pane, webrootField, 1, 1, 6, 1);
 
 		addWithConstraints(pane, new JLabel("Port HTTP"), 0, 2);
 		JSpinner httpPortSpinner = new JSpinner(httpPortModel);
@@ -105,19 +108,19 @@ public class ConfigView extends JFrame {
 
 		addWithConstraints(pane, new JLabel("Threads"), 3, 2);
 		JSpinner threadSpinner = new JSpinner(threadModel);
-		addWithConstraints(pane, threadSpinner, 4, 2, 2, 1, 0, 0);
+		addWithConstraints(pane, threadSpinner, 4, 2, 3, 1, 0, 0);
 
 		// logs
 		addWithConstraints(pane, new JLabel("Logs"), 0, 3);
 		logPathField = new JTextField();
-		addWithConstraints(pane, logPathField, 1, 3, 5, 1);
+		addWithConstraints(pane, logPathField, 1, 3, 6, 1);
 
 		logList = new JList<>(logsModel);
-		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 6, 1, 6, 6);
+		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 7, 1, 7, 6);
 		
 		addWithConstraints(pane, new JLabel("Tags"), 0, 5);
 		logTagsField = new JTextField();
-		addWithConstraints(pane, logTagsField, 1, 5, 5, 1);
+		addWithConstraints(pane, logTagsField, 1, 5, 6, 1);
 		
 		addWithConstraints(pane, new JLabel("Log-Level"), 0, 6);
 		logLevelCombo = new JComboBox<>();
@@ -125,9 +128,10 @@ public class ConfigView extends JFrame {
 		logLevelCombo.addItem(LogLevel.INFO);
 		logLevelCombo.addItem(LogLevel.WARNING);
 		logLevelCombo.addItem(LogLevel.ERROR);
-		addWithConstraints(pane, logLevelCombo, 1, 6, 4, 1);
+		addWithConstraints(pane, logLevelCombo, 1, 6, 5, 1);
 		JButton applyFiltersButton = new JButton("apply");
 		applyFiltersButton.addActionListener(ae -> applyFiltersButtonClicked.run());
+		addWithConstraints(pane, applyFiltersButton, 6, 6);
 		
 		// bottom
 		JButton applyButton = new JButton("apply");
@@ -140,7 +144,7 @@ public class ConfigView extends JFrame {
 
 		JButton onOffButton = new JButton("on/off");
 		onOffButton.addActionListener(ae -> configDelegate.onOffClicked());
-		addWithConstraints(pane, onOffButton, 5, 7);
+		addWithConstraints(pane, onOffButton, 6, 7);
 
 		setBounds(200, 200, 500, 600);
 		setMinimumSize(new Dimension(450, 550));
@@ -152,10 +156,23 @@ public class ConfigView extends JFrame {
 	 * 
 	 * @param names the names of the presets to populate the combobox with
 	 */
-	public void setPresetNames(List<String> names) {
+	public void setPresetNames(Set<String> names) {
 		
 		presetCombo.removeAll();
-		names.stream().forEach(presetCombo::addItem);
+		names.stream()
+		     .sorted()
+		     .forEach(presetCombo::addItem);
+	}
+	
+	/**
+	 * Sets the logLevel setting in the GUI
+	 * 
+	 * @param level the logLevel to display in the GUI
+	 */
+	public void setPresetName(String name) {
+		
+		presetCombo.addItem(name);
+		presetCombo.setSelectedItem(name);
 	}
 	
 	/**
@@ -198,6 +215,15 @@ public class ConfigView extends JFrame {
 	}
 	
 	/**
+	 * Sets the logLevel setting in the GUI
+	 * 
+	 * @param level the logLevel to display in the GUI
+	 */
+	public void setLogLevel(LogLevel level) {
+		logLevelCombo.setSelectedItem(level);
+	}
+	
+	/**
 	 * @return the minimum log level that gets shown.
 	 */
 	public LogLevel getLogLevel() {
@@ -213,6 +239,9 @@ public class ConfigView extends JFrame {
 		logTagsField.setText(tags);
 	}
 	
+	/**
+	 * @return the tags the logs are filtered by in the GUI.
+	 */
 	public String getLogTags() {
 		return logTagsField.getText();
 	}

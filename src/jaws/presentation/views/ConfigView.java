@@ -46,8 +46,8 @@ public class ConfigView extends JFrame {
 	JComboBox<LogLevel> logLevelCombo;
 
 	public ConfigView(PresetDelegate presetDelegate, ConfigDelegate configDelegate, MenuDelegate menuDelegate,
-			ListModel<String> logsModel, Runnable applyFiltersButtonClicked,
-			SpinnerModel httpPortModel, SpinnerModel threadModel) {
+	                  ListModel<String> logsModel, Runnable applyFiltersButtonClicked,
+	                  SpinnerModel httpPortModel, SpinnerModel threadModel) {
 
 		super("JAWS config client");
 
@@ -56,7 +56,19 @@ public class ConfigView extends JFrame {
 		setLayout(new GridBagLayout());
 		Container pane = getContentPane();
 
-		// main menu
+		setUpMainMenu(menuDelegate);
+		setUpPresets(presetDelegate, pane);		
+		setUpConfig(httpPortModel, threadModel, pane);
+		setUpLogs(logsModel, applyFiltersButtonClicked, pane);		
+		setUpBottom(configDelegate, pane);
+
+		setBounds(200, 200, 500, 600);
+		setMinimumSize(new Dimension(450, 550));
+		setVisible(true);
+	}
+
+	private void setUpMainMenu(MenuDelegate menuDelegate) {
+		
 		JMenuItem connectItem = new JMenuItem("connect");
 		connectItem.addActionListener(ae -> menuDelegate.connectClicked());
 		JMenuItem disconnectItem = new JMenuItem("disconnect");
@@ -79,12 +91,14 @@ public class ConfigView extends JFrame {
 		mainMenu.add(importExportMenu);
 
 		setJMenuBar(mainMenu);
+	}
 
-		// config
+	private void setUpPresets(PresetDelegate presetDelegate, Container pane) {
+		
 		addWithConstraints(pane, new JLabel("Preset"), 0, 0);
 		presetCombo = new JComboBox<>();
 		addWithConstraints(pane, presetCombo, 1, 0, 2, 1);
-
+		
 		JButton loadPresetButton = new JButton("load");
 		loadPresetButton.addActionListener(ae -> presetDelegate.loadPresetClicked());
 		JButton savePresetButton = new JButton("save");
@@ -97,20 +111,25 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, savePresetButton, 4, 0);
 		addWithConstraints(pane, deletePresetButton, 5, 0);
 		addWithConstraints(pane, newPresetButton, 6, 0);
+	}
 
+	private void setUpConfig(SpinnerModel httpPortModel, SpinnerModel threadModel, Container pane) {
+		
 		addWithConstraints(pane, new JLabel("Webroot"), 0, 1);
 		webrootField = new JTextField();
 		addWithConstraints(pane, webrootField, 1, 1, 6, 1);
-
+		
 		addWithConstraints(pane, new JLabel("Port HTTP"), 0, 2);
 		JSpinner httpPortSpinner = new JSpinner(httpPortModel);
 		addWithConstraints(pane, httpPortSpinner, 1, 2, 2, 1);
-
+		
 		addWithConstraints(pane, new JLabel("Threads"), 3, 2);
 		JSpinner threadSpinner = new JSpinner(threadModel);
 		addWithConstraints(pane, threadSpinner, 4, 2, 3, 1, 0, 0);
+	}
 
-		// logs
+	private void setUpLogs(ListModel<String> logsModel, Runnable applyFiltersButtonClicked, Container pane) {
+		
 		addWithConstraints(pane, new JLabel("Logs"), 0, 3);
 		logPathField = new JTextField();
 		addWithConstraints(pane, logPathField, 1, 3, 6, 1);
@@ -132,8 +151,10 @@ public class ConfigView extends JFrame {
 		JButton applyFiltersButton = new JButton("apply");
 		applyFiltersButton.addActionListener(ae -> applyFiltersButtonClicked.run());
 		addWithConstraints(pane, applyFiltersButton, 6, 6);
+	}
+
+	private void setUpBottom(ConfigDelegate configDelegate, Container pane) {
 		
-		// bottom
 		JButton applyButton = new JButton("apply");
 		applyButton.addActionListener(ae -> configDelegate.applyClicked());
 		addWithConstraints(pane, applyButton, 0, 7);
@@ -145,10 +166,6 @@ public class ConfigView extends JFrame {
 		JButton onOffButton = new JButton("on/off");
 		onOffButton.addActionListener(ae -> configDelegate.onOffClicked());
 		addWithConstraints(pane, onOffButton, 6, 7);
-
-		setBounds(200, 200, 500, 600);
-		setMinimumSize(new Dimension(450, 550));
-		setVisible(true);
 	}
 	
 	/**

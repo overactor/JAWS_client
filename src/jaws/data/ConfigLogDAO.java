@@ -97,14 +97,18 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 				try {
 					OutputStream out = connection.getOutputStream();
 					out.write(requestJson.toString().getBytes());
+					out.write("\nEndOfMessage\n".getBytes());
 					
 					BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 					StringBuilder stringBuilder = new StringBuilder();
 					{
 						String line;
-						while((line = in.readLine()) != null) {
+						System.out.println("start reading from socket");
+						while((line = in.readLine()) != null && !line.equals("EndOfMessage")) {
 							stringBuilder.append(line);
+							System.out.println(line);
 						}
+						System.out.println("finished reading from socket");
 					}
 					JSONObject response = new JSONObject(stringBuilder.toString());
 					
@@ -139,7 +143,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 				try {
 					Thread.sleep(Math.max(interval - (System.currentTimeMillis() - lastStartingTime), 0));
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					break;
 				}
 			} catch (IOException e1) {
 				e1.printStackTrace();

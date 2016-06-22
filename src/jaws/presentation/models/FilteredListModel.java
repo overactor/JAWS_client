@@ -84,7 +84,10 @@ public class FilteredListModel<E,T> extends AbstractListModel<T> implements Iter
     public void add(E element) {
 
         delegate.add(element);
-        applyFilters();
+        if (predicate.test(element)) {
+        	filtered.addElement(new SimpleEntry<>(delegate.size() - 1, mapper.apply(element)));
+        	fireContentsChanged(this, filtered.size() - 1, filtered.size() - 1);
+        }
     }
 
     /**

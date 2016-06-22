@@ -1,13 +1,15 @@
 package jaws.presentation.views;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Set;
 
-import javax.swing.BoundedRangeModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -19,10 +21,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.SpinnerModel;
-import javax.swing.event.ChangeListener;
 
 import jal.business.log.LogLevel;
 import jaws.presentation.controllers.ConfigDelegate;
@@ -137,6 +140,22 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, logPathField, 1, 3, 6, 1);
 
 		logList = new JList<>(logsModel);
+		logList.setCellRenderer(new ListCellRenderer<String>() {
+
+			@Override
+			public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
+					boolean isSelected, boolean cellHasFocus) {
+				JTextArea textArea = new JTextArea();
+				textArea.setEditable(false);
+				textArea.setText(value);
+				if (isSelected) {
+					Font f = textArea.getFont();
+					textArea.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+					textArea.setBackground(new Color(200, 236, 253));
+				}
+				return textArea;
+			}
+		});
 		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 7, 1, 7, 6);
 		
 		addWithConstraints(pane, new JLabel("Tags"), 0, 5);
@@ -150,7 +169,7 @@ public class ConfigView extends JFrame {
 		logLevelCombo.addItem(LogLevel.WARNING);
 		logLevelCombo.addItem(LogLevel.ERROR);
 		addWithConstraints(pane, logLevelCombo, 1, 6, 5, 1);
-		JButton applyFiltersButton = new JButton("apply");
+		JButton applyFiltersButton = new JButton("filter");
 		applyFiltersButton.addActionListener(ae -> applyFiltersButtonClicked.run());
 		addWithConstraints(pane, applyFiltersButton, 6, 6);
 	}

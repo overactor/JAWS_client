@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Set;
 
+import javax.swing.BoundedRangeModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -21,6 +22,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.SpinnerModel;
+import javax.swing.event.ChangeListener;
 
 import jal.business.log.LogLevel;
 import jaws.presentation.controllers.ConfigDelegate;

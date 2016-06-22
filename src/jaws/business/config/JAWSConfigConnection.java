@@ -35,7 +35,7 @@ public class JAWSConfigConnection {
 	}
 	
 	public void restartSever() {
-		
+		configDao.restartServer();
 	}
 	
 	public void close() {

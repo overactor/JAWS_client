@@ -88,7 +88,7 @@ public class ConfigController {
 			@Override
 			public void onOffClicked() {
 
-				
+				configConnection.restartSever();
 			}
 			
 			@Override

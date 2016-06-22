@@ -55,6 +55,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 		}
 	}
 	
+	@Override
 	public void restartServer() {
 		synchronized(restartServer) {
 			restartServer = true;

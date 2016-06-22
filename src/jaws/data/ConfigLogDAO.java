@@ -27,6 +27,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 	private final Consumer<Map<String, JSONObject>> configCallback;
 
 	private volatile Boolean updateConfigs;
+	private volatile Boolean restartServer;
 
 	private Map<String, JSONObject> configsToSave = new ConcurrentHashMap<>();
 
@@ -37,6 +38,7 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 		this.logCallback = logCallback;
 		this.configCallback = configCallback;
 		updateConfigs = false;
+		restartServer = false;
 	}
 
 	@Override
@@ -50,6 +52,12 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 	public void saveConfigs(Map<String, JSONObject> configs) {
 		synchronized (this.configsToSave) {
 			this.configsToSave.putAll(configs);
+		}
+	}
+	
+	public void restartServer() {
+		synchronized(restartServer) {
+			restartServer = true;
 		}
 	}
 
@@ -74,6 +82,17 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 					updateLogsJson.put("lastUpdate", lastLogUpdate);
 				}
 	
+				synchronized(restartServer) {
+					if(restartServer) {
+						requestJson.put("restart", true);
+						
+						OutputStream out = connection.getOutputStream();
+						out.write(requestJson.toString().getBytes());
+						out.write("\nEndOfMessage\n".getBytes());
+						
+						continue;
+					}
+				}
 				synchronized (updateConfigs) {
 					if(updateConfigs) {
 						JSONObject updateConfigsJson = new JSONObject();

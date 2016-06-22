@@ -34,6 +34,10 @@ public class JAWSConfigConnection {
 		configDao.updateConfigs();
 	}
 	
+	public void restartSever() {
+		
+	}
+	
 	public void close() {
 		
 		configDaoThread.interrupt();

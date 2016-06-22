@@ -12,6 +12,11 @@ import java.util.function.Supplier;
 
 import org.json.JSONObject;
 
+/**
+ * A DAO for Preset objects.
+ * 
+ * @author Rik
+ */
 class FilePresetDAO implements PresetDAO {
 	
 	private File file;

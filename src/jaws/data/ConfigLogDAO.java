@@ -17,6 +17,11 @@ import java.util.function.Consumer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * A class that represents a connection to a JAWS server
+ * 
+ * @author Rik
+ */
 public class ConfigLogDAO implements ConfigDAO, Runnable {
 
 	private final String server;

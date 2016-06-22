@@ -12,32 +12,53 @@ import jal.business.log.Log;
 import jaws.data.ConfigDAO;
 import jaws.data.ConfigLogDAO;
 
+/**
+ * Represents a connection to a JAWS server
+ * 
+ * @author Rik
+ * 
+ * @see jaws.data.config.ConfigDAO
+ */
 public class JAWSConfigConnection {
 	
-	ConfigDAO configDao;
+	ConfigDAO configDAO;
 	Thread configDaoThread;
 	
 	public JAWSConfigConnection(String server, int port, Consumer<List<Log>> logCallback, Consumer<Config> configCallback) {
 		ConfigLogDAO configLogDao = new ConfigLogDAO(server, port, 500,
 		                             logList -> logCallback.accept(logList.stream().map(Log::from).collect(Collectors.toList())),
 		                             configMap -> configCallback.accept(configFrom(configMap)));
-		configDao = configLogDao;
+		configDAO = configLogDao;
 		configDaoThread = new Thread(configLogDao);
 		configDaoThread.start();
 	}
 	
+	/**
+	 * Saves configurations to the JAWS server
+	 * 
+	 * @param config the configurations to save
+	 */
 	public void saveConfig(Config config) {		
-		configDao.saveConfigs(toJSONMap(config));
+		configDAO.saveConfigs(toJSONMap(config));
 	}
 	
+	/**
+	 * Loads configurations from the JAWS server
+	 */
 	public void loadConfigs() {
-		configDao.updateConfigs();
+		configDAO.updateConfigs();
 	}
 	
+	/**
+	 * Restarts the JAWS server
+	 */
 	public void restartSever() {
 		
 	}
 	
+	/**
+	 * Closes the connection to the JAWS server
+	 */
 	public void close() {
 		
 		configDaoThread.interrupt();

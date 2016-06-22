@@ -2,6 +2,11 @@ package jaws.business.config;
 
 import org.json.JSONObject;
 
+/**
+ * A class to represent configurations for a JAWS server
+ * 
+ * @author Rik
+ */
 public class Config {
 	
 	private String webroot;

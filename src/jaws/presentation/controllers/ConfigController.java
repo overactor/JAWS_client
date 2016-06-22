@@ -79,7 +79,7 @@ public class ConfigController {
 			@Override
 			public void resetClicked() {
 
-				
+				configConnection.loadConfigs();
 			}
 			
 			@Override
@@ -129,7 +129,7 @@ public class ConfigController {
 				int	port = tryCatch(() -> Integer.parseInt(host.split(":")[1])).orElse(8080);
 				
 				configConnection = new JAWSConfigConnection(hostname, port,
-				                                            logs -> logs.forEach(logsModel::add),
+				                                            logs -> SwingUtilities.invokeLater(() -> logs.forEach(logsModel::add)),
 				                                            config -> SwingUtilities.invokeLater(() -> {
 				                                            	configView.setLogPath(config.getLogPath());
 				                                            	httpPortModel.setValue(config.getPort());

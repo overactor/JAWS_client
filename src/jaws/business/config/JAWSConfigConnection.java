@@ -30,6 +30,10 @@ public class JAWSConfigConnection {
 		configDao.saveConfigs(toJSONMap(config));
 	}
 	
+	public void loadConfigs() {
+		configDao.updateConfigs();
+	}
+	
 	public void close() {
 		
 		configDaoThread.interrupt();

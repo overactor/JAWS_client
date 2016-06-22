@@ -103,12 +103,9 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 					StringBuilder stringBuilder = new StringBuilder();
 					{
 						String line;
-						System.out.println("start reading from socket");
 						while((line = in.readLine()) != null && !line.equals("EndOfMessage")) {
 							stringBuilder.append(line);
-							System.out.println(line);
 						}
-						System.out.println("finished reading from socket");
 					}
 					JSONObject response = new JSONObject(stringBuilder.toString());
 					

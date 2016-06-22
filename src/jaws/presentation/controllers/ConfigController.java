@@ -148,9 +148,11 @@ public class ConfigController {
 		};
 		
 		logsModel.setPredicate(log -> log.getLogLevel().getLevel() >= configView.getLogLevel().getLevel()
-		                              &&  Arrays.stream(configView.getLogTags().split(","))
-		                                        .map(String::toLowerCase)
-		                                        .anyMatch(tag -> tag.equals(log.getTag()))
+		                              && ("".equals(configView.getLogTags().trim())
+		                                  || Arrays.stream(configView.getLogTags().split(","))
+		                                           .map(String::toLowerCase)
+		                                           .map(String::trim)
+		                                           .anyMatch(tag -> tag.equals(log.getTag())))
 		);
 		
 		configView = new ConfigView(presetDelegate, configDelegate, menuDelegate,

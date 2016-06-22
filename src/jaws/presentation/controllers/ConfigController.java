@@ -64,13 +64,16 @@ public class ConfigController {
 			@Override
 			public void newPresetClicked() {
 				
-				String presetName = (String) JOptionPane.showInputDialog(configView,
-                                                                         "Enter the name of the new preset",
-                                                                         "New preset",
-                                                                         JOptionPane.PLAIN_MESSAGE);
-				ConfigController.this.configView.setPresetName(presetName);
-				Preset preset = ConfigController.this.presetFromGUI();
-				PresetFactory.savePreset(preset);
+				Optional<String> presetName = 
+					Optional.ofNullable(JOptionPane.showInputDialog(configView,
+					                                                "Enter the name of the new preset",
+					                                                "New preset",
+					                                                JOptionPane.PLAIN_MESSAGE));
+				presetName.ifPresent(name -> {
+					ConfigController.this.configView.setPresetName(name);
+					Preset preset = ConfigController.this.presetFromGUI();
+					PresetFactory.savePreset(preset);
+				});
 			}
 		};
 		
@@ -121,21 +124,24 @@ public class ConfigController {
 			@Override
 			public void connectClicked() {
 
-				String host = (String) JOptionPane.showInputDialog(configView,
-				                                                   "Enter the server to connect to (hostname:port)",
-				                                                   "Connect...",
-				                                                   JOptionPane.PLAIN_MESSAGE);
-				String hostname = host.split(":")[0];
-				int	port = tryCatch(() -> Integer.parseInt(host.split(":")[1])).orElse(8080);
-				
-				configConnection = new JAWSConfigConnection(hostname, port,
-				                                            logs -> SwingUtilities.invokeLater(() -> logs.forEach(logsModel::add)),
-				                                            config -> SwingUtilities.invokeLater(() -> {
-				                                            	configView.setLogPath(config.getLogPath());
-				                                            	httpPortModel.setValue(config.getPort());
-				                                            	threadModel.setValue(config.getThreads());
-				                                            	configView.setWebroot(config.getWebroot());
-				                                            }));
+				Optional<String> host = 
+					Optional.ofNullable(JOptionPane.showInputDialog(configView,
+					                                                "Enter the server to connect to (hostname:port)",
+					                                                "Connect...",
+					                                                JOptionPane.PLAIN_MESSAGE));
+				host.ifPresent(h -> {
+					String hostname = h.split(":")[0];
+					int	port = tryCatch(() -> Integer.parseInt(h.split(":")[1])).orElse(8080);
+					
+					configConnection = new JAWSConfigConnection(hostname, port,
+					                                            logs -> SwingUtilities.invokeLater(() -> logs.forEach(logsModel::add)),
+					                                            config -> SwingUtilities.invokeLater(() -> {
+					                                            	configView.setLogPath(config.getLogPath());
+					                                            	httpPortModel.setValue(config.getPort());
+					                                            	threadModel.setValue(config.getThreads());
+					                                            	configView.setWebroot(config.getWebroot());
+					                                            }));
+				});
 			}
 			
 			@Override

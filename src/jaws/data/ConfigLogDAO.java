@@ -96,7 +96,9 @@ public class ConfigLogDAO implements ConfigDAO, Runnable {
 						out.write(requestJson.toString().getBytes());
 						out.write("\nEndOfMessage\n".getBytes());
 						
-						continue;
+						restartServer = false;
+						
+						return;
 					}
 				}
 				synchronized (updateConfigs) {

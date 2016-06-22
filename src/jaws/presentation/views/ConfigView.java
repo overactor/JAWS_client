@@ -140,7 +140,7 @@ public class ConfigView extends JFrame {
 		addWithConstraints(pane, logPathField, 1, 3, 6, 1);
 
 		logList = new JList<>(logsModel);
-		logList.setCellRenderer(new ListCellRenderer<String>() {
+		/*logList.setCellRenderer(new ListCellRenderer<String>() {
 
 			@Override
 			public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
@@ -155,7 +155,7 @@ public class ConfigView extends JFrame {
 				}
 				return textArea;
 			}
-		});
+		});*/
 		addWithConstraints(pane, new JScrollPane(logList), 0, 4, 7, 1, 7, 6);
 		
 		addWithConstraints(pane, new JLabel("Tags"), 0, 5);

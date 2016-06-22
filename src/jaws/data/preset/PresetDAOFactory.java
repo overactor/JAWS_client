@@ -19,6 +19,6 @@ public class PresetDAOFactory {
 	 * @return
 	 */
 	public static PresetDAO createPresetDAO(Supplier<Optional<File>> saveFilePicker, Supplier<Optional<File>> openFilePicker) {
-		return new FilePresetDAO("presets.json", saveFilePicker, openFilePicker);
+		return new FilePresetDAO("../presets/presets.json", saveFilePicker, openFilePicker);
 	}
 }

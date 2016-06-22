@@ -1,6 +1,6 @@
 package jaws.data.preset;
 
-import static trycrash.Try.tryCatch;
+import static trycrash.Try.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,8 +81,9 @@ class FilePresetDAO implements PresetDAO {
 		
 	private void saveJSON(JSONObject json, File file) {
 		
+		new File(file.getParent()).mkdirs();
+		tryCrash(file::createNewFile);
 		try (PrintWriter out = new PrintWriter(file)) {
-			file.createNewFile();
 			out.println(json.toString());
 		} catch (IOException e) {
 			e.printStackTrace();

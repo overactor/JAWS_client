@@ -53,7 +53,7 @@ public class JAWSConfigConnection {
 	 * Restarts the JAWS server
 	 */
 	public void restartSever() {
-		configDao.restartServer();
+		configDAO.restartServer();
 	}
 	
 	/**
